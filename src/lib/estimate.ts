@@ -71,7 +71,7 @@ export function estimate(i: Inputs, d: RateData): Estimate {
   const missing: string[] = [];
   if (!(i.area > 0)) missing.push("Plinth area (sq ft) must be greater than 0");
   if (i.areaMode === "perFloor" && !(i.floors >= 1)) missing.push("Number of floors must be at least 1");
-  const rate = d.rates[rateKey(i.buildingType, i.quality, i.location)];
+  const rate = d.rates[rateKey(i.buildingType, i.quality, i.location)] ?? 0;
   if (!(rate > 0))
     missing.push(`Validated rate for ${i.buildingType} · ${i.quality} quality · ${i.location} — add it on the Rates page`);
   if (missing.length) return { ok: false, missing };
