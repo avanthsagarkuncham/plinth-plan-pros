@@ -9,7 +9,7 @@ export function AllocationChart({ rows }: { rows: { category: string; amount: nu
       <div className="h-56">
         <ResponsiveContainer>
           <PieChart>
-            <Pie data={rows} dataKey="amount" nameKey="category" innerRadius="55%" outerRadius="85%" stroke="var(--background)" isAnimationActive={!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches}>
+            <Pie data={rows} dataKey="amount" nameKey="category" innerRadius="55%" outerRadius="85%" stroke="var(--background)" isAnimationActive={typeof window !== "undefined" && !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches}>
               {rows.map((_, i) => <Cell key={i} fill={colors[i]} />)}
             </Pie>
             <Tooltip formatter={(v: number) => inr(v)} contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", color: "var(--foreground)" }} />
