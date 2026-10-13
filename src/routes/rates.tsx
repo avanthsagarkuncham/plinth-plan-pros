@@ -3,6 +3,7 @@ import { Shell, Panel } from "@/components/Shell";
 import { useEstimate } from "@/lib/store";
 import { BUILDING_TYPES, CATEGORIES, LOCATIONS, QUALITIES, rateKey, type BuildingType } from "@/lib/estimate";
 import { useState } from "react";
+import { sampleRateData } from "@/lib/sampleRates";
 
 export const Route = createFileRoute("/rates")({
   head: () => ({
@@ -29,6 +30,10 @@ function Rates() {
       <p className="mb-6 max-w-2xl text-sm text-muted-foreground">Enter plinth area rates (₹/sq ft) from an authoritative source such as your state PWD / CPWD Plinth Area Rates schedule. Each rate is location-specific, so no extra location factor is applied. Blank cells mean no estimate is shown for that combination.</p>
       <div className="grid gap-6">
         <Panel title="Rate table">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <button className="btn-gold" onClick={() => setData(sampleRateData())}>Load sample rates</button>
+            <span className="text-xs text-muted-foreground">Fills every combination with illustrative sample values and replaces the current table.</span>
+          </div>
           <div className="mb-4 flex flex-wrap gap-2">{BUILDING_TYPES.map((t) => <button key={t} onClick={() => setType(t)} className={t === type ? "btn-gold" : "btn-ghost"}>{t}</button>)}</div>
           <div className="overflow-x-auto">
             <table className="text-sm">
