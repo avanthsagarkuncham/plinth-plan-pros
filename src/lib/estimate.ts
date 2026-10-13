@@ -63,7 +63,7 @@ export function allocate(total: number, alloc: RateData["allocation"]) {
   // Round to whole rupees; last category absorbs rounding so the sum equals the total exactly.
   const rows = CATEGORIES.map((c, i) => ({ category: c, percent: pcts[i] as number, amount: Math.round((total * (pcts[i] as number)) / 100) }));
   const diff = total - rows.reduce((s, r) => s + r.amount, 0);
-  rows[rows.length - 1].amount += diff;
+  rows[rows.length - 1]!.amount += diff;
   return { rows };
 }
 
