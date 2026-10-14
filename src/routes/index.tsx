@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Shell, Panel, Missing } from "@/components/Shell";
 import { useEstimate } from "@/lib/store";
+import { SaveReportButton } from "@/components/SaveReportButton";
 import { BUILDING_TYPES, LOCATIONS, QUALITIES, inr, inr2 } from "@/lib/estimate";
 
 export const Route = createFileRoute("/")({
@@ -10,6 +11,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Estimate construction cost with the Plinth Area Method: total plinth area × validated rate per sq ft." },
       { property: "og:title", content: "Plinth Area Construction Cost Estimator" },
       { property: "og:description", content: "Estimate construction cost with the Plinth Area Method." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Index,
@@ -54,7 +57,7 @@ function Index() {
                 <div><p className="text-muted-foreground text-xs">Total plinth area</p><p className="tabular-nums">{result.totalArea.toLocaleString("en-IN")} sq ft</p></div>
                 <div><p className="text-muted-foreground text-xs">Cost / sq ft</p><p className="tabular-nums">{inr2(result.costPerSqFt)}</p></div>
               </div>
-              <div className="flex gap-2"><Link to="/dashboard" className="btn-gold">Dashboard</Link><Link to="/breakdown" className="btn-ghost">Breakdown</Link></div>
+              <div className="flex flex-wrap gap-2"><Link to="/dashboard" className="btn-gold">Dashboard</Link><Link to="/breakdown" className="btn-ghost">Breakdown</Link><SaveReportButton /></div>
             </div>
           ) : <Missing items={result.missing} />}
         </Panel>
