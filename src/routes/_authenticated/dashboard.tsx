@@ -5,7 +5,7 @@ import { useEstimate } from "@/lib/store";
 import { inr, inr2 } from "@/lib/estimate";
 import { downloadReport } from "@/lib/pdf";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Estimate Dashboard · Plinth Area Cost" },

@@ -11,8 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BreakdownRouteImport } from './routes/breakdown'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as RatesRouteImport } from './routes/rates'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,49 +24,49 @@ const BreakdownRoute = BreakdownRouteImport.update({
   path: '/breakdown',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RatesRoute = RatesRouteImport.update({
   id: '/rates',
   path: '/rates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/_authenticated/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/breakdown': typeof BreakdownRoute
-  '/dashboard': typeof DashboardRoute
   '/rates': typeof RatesRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/breakdown': typeof BreakdownRoute
-  '/dashboard': typeof DashboardRoute
   '/rates': typeof RatesRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/breakdown': typeof BreakdownRoute
-  '/dashboard': typeof DashboardRoute
   '/rates': typeof RatesRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/breakdown' | '/dashboard' | '/rates'
+  fullPaths: '/' | '/breakdown' | '/rates' | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/breakdown' | '/dashboard' | '/rates'
-  id: '__root__' | '/' | '/breakdown' | '/dashboard' | '/rates'
+  to: '/' | '/breakdown' | '/rates' | '/dashboard'
+  id: '__root__' | '/' | '/breakdown' | '/rates' | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BreakdownRoute: typeof BreakdownRoute
-  DashboardRoute: typeof DashboardRoute
   RatesRoute: typeof RatesRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -85,18 +85,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BreakdownRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/rates': {
       id: '/rates'
       path: '/rates'
       fullPath: '/rates'
       preLoaderRoute: typeof RatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -105,8 +105,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BreakdownRoute: BreakdownRoute,
-  DashboardRoute: DashboardRoute,
   RatesRoute: RatesRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
