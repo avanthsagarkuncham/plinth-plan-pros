@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      saved_reports: {
+        Row: {
+          area_mode: string
+          area_per_floor: number | null
+          assumptions: Json | null
+          building_type: string
+          city: string
+          construction_quality: string
+          cost_allocations: Json | null
+          created_at: string
+          estimate_inputs: Json
+          estimated_total_cost: number
+          floors: number
+          id: string
+          location_category: string
+          notes: string
+          project_name: string
+          rate_per_sqft: number
+          rate_source: string
+          report_name: string
+          state: string
+          total_plinth_area: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          area_mode: string
+          area_per_floor?: number | null
+          assumptions?: Json | null
+          building_type: string
+          city?: string
+          construction_quality: string
+          cost_allocations?: Json | null
+          created_at?: string
+          estimate_inputs: Json
+          estimated_total_cost: number
+          floors?: number
+          id?: string
+          location_category: string
+          notes?: string
+          project_name?: string
+          rate_per_sqft: number
+          rate_source?: string
+          report_name: string
+          state?: string
+          total_plinth_area: number
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          area_mode?: string
+          area_per_floor?: number | null
+          assumptions?: Json | null
+          building_type?: string
+          city?: string
+          construction_quality?: string
+          cost_allocations?: Json | null
+          created_at?: string
+          estimate_inputs?: Json
+          estimated_total_cost?: number
+          floors?: number
+          id?: string
+          location_category?: string
+          notes?: string
+          project_name?: string
+          rate_per_sqft?: number
+          rate_source?: string
+          report_name?: string
+          state?: string
+          total_plinth_area?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
