@@ -1,4 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { reportsQuery } from "@/lib/useReports";
+import { SaveReportButton } from "@/components/SaveReportButton";
 import { Shell, Panel, Missing } from "@/components/Shell";
 import { AllocationChart } from "@/components/AllocationChart";
 import { useEstimate } from "@/lib/store";
@@ -12,6 +15,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
       { name: "description", content: "Total plinth area, applicable rate, total cost, cost per sq ft and allocation chart." },
       { property: "og:title", content: "Estimate Dashboard · Plinth Area Cost" },
       { property: "og:description", content: "Your construction cost estimate at a glance." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Dashboard,
@@ -27,7 +32,12 @@ function Dashboard() {
     <Shell>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <h1 className="font-display text-3xl">Dashboard</h1>
-        {r.ok && <button className="btn-gold" onClick={() => downloadReport(i, data, r)}>Download PDF report</button>}
+        <div className="flex flex-wrap gap-2">
+          <Link to="/" className="btn-ghost">Create Estimate</Link>
+          <Link to="/reports" className="btn-ghost">View Saved Reports</Link>
+          <SaveReportButton />
+          {r.ok && <button className="btn-gold" onClick={() => downloadReport(i, data, r)}>Download PDF report</button>}
+        </div>
       </div>
       {!r.ok ? <Missing items={r.missing} /> : (
         <div className="grid gap-4 lg:grid-cols-3">
@@ -44,6 +54,36 @@ function Dashboard() {
           </Panel>
         </div>
       )}
+      <SavedStats />
     </Shell>
+  );
+}
+
+function SavedStats() {
+  const { data: reps = [], isLoading } = useQuery(reportsQuery);
+  if (isLoading) return null;
+  const latest = reps[0];
+  const top = reps.reduce<(typeof reps)[number] | undefined>((m, x) => (!m || Number(x.estimated_total_cost) > Number(m.estimated_total_cost) ? x : m), undefined);
+  return (
+    <div className="mt-8">
+      <h2 className="mb-4 font-display text-2xl">Your saved reports</h2>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Stat k="Total saved reports" v={String(reps.length)} />
+        <Stat k="Most recent estimate" v={latest ? inr(Number(latest.estimated_total_cost)) : "—"} />
+        <Stat k="Highest project cost" v={top ? inr(Number(top.estimated_total_cost)) : "—"} accent />
+      </div>
+      <Panel title="Recently saved" className="mt-4">
+        {reps.length === 0 ? <p className="text-sm text-muted-foreground">No saved reports yet. Create your first construction estimate.</p> : (
+          <ul className="divide-y divide-border/40">
+            {reps.slice(0, 5).map((x) => (
+              <li key={x.id}><Link to="/reports/$id" params={{ id: x.id }} className="flex justify-between gap-3 py-2 text-sm hover:text-gold">
+                <span className="truncate">{x.report_name} <span className="text-muted-foreground">· {x.building_type} · {new Date(x.created_at).toLocaleDateString("en-IN")}</span></span>
+                <span className="tabular-nums">{inr(Number(x.estimated_total_cost))}</span>
+              </Link></li>
+            ))}
+          </ul>
+        )}
+      </Panel>
+    </div>
   );
 }
