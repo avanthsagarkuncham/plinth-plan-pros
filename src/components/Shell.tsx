@@ -29,7 +29,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 <span className="max-w-[180px] truncate text-muted-foreground" title={user.email}>{user.email}</span>
                 <button onClick={signOut} className="btn-ghost !py-1">Sign out</button>
               </>
-            ) : <Link to="/auth" className="btn-gold !py-1">Sign in</Link>)}
+            ) : <Link to="/auth" search={{}} className="btn-gold !py-1">Sign in</Link>)}
           </div>
         </div>
       </header>

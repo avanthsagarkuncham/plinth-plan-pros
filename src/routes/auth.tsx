@@ -7,7 +7,7 @@ const safePath = (p?: string) => (p && p.startsWith("/") && !p.startsWith("//") 
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({ redirect: typeof s.redirect === "string" ? s.redirect : undefined }),
+  validateSearch: (s: Record<string, unknown>): { redirect?: string } => ({ redirect: typeof s["redirect"] === "string" ? (s["redirect"] as string) : undefined }),
   beforeLoad: async ({ search }) => {
     const { data } = await supabase.auth.getUser();
     if (data.user) throw redirect({ to: safePath(search.redirect) });

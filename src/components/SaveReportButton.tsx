@@ -24,13 +24,13 @@ export function SaveReportButton() {
   const openModal = () => { setName(defaultReportName()); setProject(inputs.projectName); setNotes(""); setOpen(true); };
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return toast.error("Please enter a report name.");
+    if (!name.trim()) { toast.error("Please enter a report name."); return; }
     setBusy(true);
     const { data: row, error } = await supabase.from("saved_reports")
       .insert(buildReportRow(inputs, data, result, { report_name: name.trim(), project_name: project.trim(), notes: notes.trim() }))
       .select("id").single();
     setBusy(false);
-    if (error) return toast.error("Could not save the report: " + error.message);
+    if (error) { toast.error("Could not save the report: " + error.message); return; }
     qc.invalidateQueries({ queryKey: ["reports"] });
     setOpen(false);
     toast.success("Report saved", { action: { label: "Open", onClick: () => navigate({ to: "/reports/$id", params: { id: row.id } }) } });

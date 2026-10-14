@@ -50,7 +50,7 @@ function ReportPage() {
     const row = buildReportRow(i, current, fresh, { report_name: rep.report_name, project_name: rep.project_name, notes: rep.notes });
     const { error } = await supabase.from("saved_reports").update(row).eq("id", rep.id);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Report recalculated with current rates");
     setRecalcOpen(false);
     qc.invalidateQueries({ queryKey: ["reports"] });
